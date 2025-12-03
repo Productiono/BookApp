@@ -7,19 +7,11 @@ defined('ABSPATH') || exit;
 class Admin
 {
     /**
-     * External app URL to embed inside the dashboard
+     * Full URL to the login page that should be embedded inside the dashboard.
      *
      * @var string
      */
-    private $app_url = 'http://162.55.168.66:3000';
-
-    /**
-     * Relative path to the login screen. Users will be redirected back to the
-     * embedded dashboard after logging in.
-     *
-     * @var string
-     */
-    private $login_path = '/auth/login?redirect=/';
+    private $embed_url = 'http://162.55.168.66:3000/auth/login';
 
     public function hooks(): void
     {
@@ -92,9 +84,6 @@ class Admin
      */
     private function get_login_url(): string
     {
-        $base = trailingslashit($this->app_url);
-        $login_path = ltrim($this->login_path, '/');
-
-        return $base . $login_path;
+        return $this->embed_url;
     }
 }
