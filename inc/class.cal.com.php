@@ -11,14 +11,17 @@ class Cal
     private function includes(): void
     {
         include_once CALCOM_DIR_PATH . 'inc/class.embed.php';
+        include_once CALCOM_DIR_PATH . 'inc/class.admin.php';
     }
 
     private function __construct()
     {
         $this->includes();
         $embed = new \CalCom\Embed;
+        $admin = new \CalCom\Admin;
         $this->hooks();
         $embed->hooks();
+        $admin->hooks();
     }
 
     private function hooks(): void
