@@ -13,6 +13,14 @@ class Admin
      */
     private $app_url = 'http://162.55.168.66:3000';
 
+    /**
+     * Relative path to the login screen. Users will be redirected back to the
+     * embedded dashboard after logging in.
+     *
+     * @var string
+     */
+    private $login_path = '/auth/login?redirect=/';
+
     public function hooks(): void
     {
         add_action('admin_menu', [$this, 'register_menu']);
@@ -59,11 +67,12 @@ class Admin
      */
     public function render_admin_page(): void
     {
+        $login_url = esc_url($this->get_login_url());
         ?>
         <div class="calcom-admin-wrap">
             <div class="calcom-admin-frame-wrapper">
                 <iframe
-                    src="<?php echo esc_url($this->app_url); ?>"
+                    src="<?php echo $login_url; ?>"
                     class="calcom-admin-iframe"
                     title="Cal.com bookings"
                     frameborder="0"
@@ -72,5 +81,20 @@ class Admin
             </div>
         </div>
         <?php
+    }
+
+    /**
+     * Build the login URL to ensure we always load the login form first.
+     * Once authenticated, the remote app handles redirecting the user to the
+     * dashboard within the same iframe.
+     *
+     * @return string
+     */
+    private function get_login_url(): string
+    {
+        $base = trailingslashit($this->app_url);
+        $login_path = ltrim($this->login_path, '/');
+
+        return $base . $login_path;
     }
 }
